@@ -1,7 +1,7 @@
 {
-    "name": "ehsann/tracker",
+    "name": "ehsann/lara-track",
     "description": "A Laravel Visitor Tracker",
-    "keywords": ["tracker", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel"],
+    "keywords": ["lara track","tracker", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel"],
     "license": "MIT",
     "authors": [
         {
