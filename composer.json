@@ -44,5 +44,5 @@
                 "Tracker": "PragmaRX\\Tracker\\Vendor\\Laravel\\Facade"
             }
         }
-    },
+    }
 }
