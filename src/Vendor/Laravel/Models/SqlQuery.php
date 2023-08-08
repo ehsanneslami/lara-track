@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-class Sql extends Base
+class SqlQuery extends Base
 {
-    protected $table = 'tracker_sqls';
+    protected $table = 'tracker_sql_queries';
 
     protected $fillable = [
         'sha1',

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->bigInteger('log_id')->unsigned()->index();
             $table->foreign('log_id')->references('id')->on('tracker_log')->onUpdate('cascade')->onDelete('cascade');
 
-            $table->bigInteger('sql_id')->unsigned()->index();
-            $table->foreign('sql_id')->references('id')->on('tracker_sqls')->onUpdate('cascade')->onDelete('cascade');
+            $table->bigInteger('sql_query_id')->unsigned()->index();
+            $table->foreign('sql_query_id')->references('id')->on('tracker_sql_queries')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();
             $table->index('created_at');

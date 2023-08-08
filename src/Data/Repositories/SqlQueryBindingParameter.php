@@ -2,6 +2,6 @@
 
 namespace PragmaRX\Tracker\Data\Repositories;
 
-class SqlBindingParameter extends Repository
+class SqlQueryBindingParameter extends Repository
 {
 }

@@ -24,9 +24,9 @@ use PragmaRX\Tracker\Data\Repositories\Route;
 use PragmaRX\Tracker\Data\Repositories\RoutePath;
 use PragmaRX\Tracker\Data\Repositories\RoutePathParameter;
 use PragmaRX\Tracker\Data\Repositories\Session;
-use PragmaRX\Tracker\Data\Repositories\Sql;
-use PragmaRX\Tracker\Data\Repositories\SqlBinding;
-use PragmaRX\Tracker\Data\Repositories\SqlBindingParameter;
+use PragmaRX\Tracker\Data\Repositories\SqlQuery;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBinding;
+use PragmaRX\Tracker\Data\Repositories\SqlQueryBindingParameter;
 use PragmaRX\Tracker\Data\Repositories\SqlQueryLog;
 use PragmaRX\Tracker\Data\Repositories\SystemClass;
 use PragmaRX\Tracker\Data\RepositoryManager;
@@ -210,13 +210,13 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $geoipModel = $this->instantiateModel('geoip_model');
 
-            $SqlModel = $this->instantiateModel('sql_model');
+            $sqlQueryModel = $this->instantiateModel('sql_query_model');
 
-            $SqlBindingModel = $this->instantiateModel('sql_binding_model');
+            $sqlQueryBindingModel = $this->instantiateModel('sql_query_binding_model');
 
-            $SqlBindingParameterModel = $this->instantiateModel('sql_binding_parameter_model');
+            $sqlQueryBindingParameterModel = $this->instantiateModel('sql_query_binding_parameter_model');
 
-            $SqlQueryLogModel = $this->instantiateModel('sql_query_log_model');
+            $sqlQueryLogModel = $this->instantiateModel('sql_query_log_model');
 
             $connectionModel = $this->instantiateModel('connection_model');
 
@@ -232,17 +232,17 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $connectionRepository = new Connection($connectionModel);
 
-            $SqlBindingRepository = new SqlBinding($SqlBindingModel);
+            $sqlQueryBindingRepository = new SqlQueryBinding($sqlQueryBindingModel);
 
-            $SqlBindingParameterRepository = new SqlBindingParameter($SqlBindingParameterModel);
+            $sqlQueryBindingParameterRepository = new SqlQueryBindingParameter($sqlQueryBindingParameterModel);
 
-            $SqlQueryLogRepository = new SqlQueryLog($SqlQueryLogModel);
+            $sqlQueryLogRepository = new SqlQueryLog($sqlQueryLogModel);
 
-            $SqlRepository = new Sql(
-                $SqlModel,
-                $SqlQueryLogRepository,
-                $SqlBindingRepository,
-                $SqlBindingParameterRepository,
+            $sqlQueryRepository = new SqlQuery(
+                $sqlQueryModel,
+                $sqlQueryLogRepository,
+                $sqlQueryBindingRepository,
+                $sqlQueryBindingParameterRepository,
                 $connectionRepository,
                 $logRepository,
                 $app['tracker.config']
@@ -307,10 +307,10 @@ class ServiceProvider extends PragmaRXServiceProvider
                 new RoutePathParameter($routePathParameterModel),
                 new Error($errorModel),
                 new GeoIpRepository($geoipModel),
-                $SqlRepository,
-                $SqlBindingRepository,
-                $SqlBindingParameterRepository,
-                $SqlQueryLogRepository,
+                $sqlQueryRepository,
+                $sqlQueryBindingRepository,
+                $sqlQueryBindingParameterRepository,
+                $sqlQueryLogRepository,
                 $connectionRepository,
                 $eventRepository,
                 $eventLogRepository,
@@ -415,11 +415,11 @@ class ServiceProvider extends PragmaRXServiceProvider
                 $time,
                 $name
             ) use ($me) {
-                $me->logSql($query, $bindings, $time, $name);
+                $me->logSqlQuery($query, $bindings, $time, $name);
             });
         } else {
             $this->app['events']->listen('Illuminate\Database\Events\QueryExecuted', function ($query) use ($me) {
-                $me->logSql($query);
+                $me->logSqlQuery($query);
             });
         }
     }
@@ -431,7 +431,7 @@ class ServiceProvider extends PragmaRXServiceProvider
      * @param $name
      * @param $me
      */
-    public function logSql($query, $bindings = null, $time = null, $connectionName = null)
+    public function logSqlQuery($query, $bindings = null, $time = null, $connectionName = null)
     {
         if ($this->getTracker()->isEnabled()) {
             if ($query instanceof \Illuminate\Database\Events\QueryExecuted) {
@@ -441,7 +441,7 @@ class ServiceProvider extends PragmaRXServiceProvider
                 $query = $query->sql;
             }
 
-            $this->getTracker()->logSql($query, $bindings, $time, $connectionName);
+            $this->getTracker()->logSqlQuery($query, $bindings, $time, $connectionName);
         }
     }
 

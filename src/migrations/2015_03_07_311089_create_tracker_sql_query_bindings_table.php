@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tracker_sqls', function (Blueprint $table) {
+        Schema::create('tracker_sql_query_bindings', function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('sha1', 40)->index();
-            $table->text('statement');
-            $table->double('time')->index();
-            $table->integer('connection_id')->unsigned();
+            $table->text('serialized');
 
             $table->timestamps();
             $table->index('created_at');
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tracker_sqls');
+        Schema::dropIfExists('tracker_sql_query_bindings');
     }
 };

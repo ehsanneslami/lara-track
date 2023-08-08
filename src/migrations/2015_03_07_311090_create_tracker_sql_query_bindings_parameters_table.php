@@ -13,11 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tracker_sql_bindings', function (Blueprint $table) {
+        Schema::create('tracker_sql_query_bindings_parameters', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('sha1', 40)->index();
-            $table->text('serialized');
+            $table->bigInteger('sql_query_bindings_id')->unsigned()->nullable();
+            $table->foreign('sql_query_bindings_id', 'tracker_sqlqb_parameters')->references('id')->on('tracker_sql_query_bindings')->onUpdate('cascade')->onDelete('cascade');
+            
+            $table->string('name')->nullable()->index();
+            $table->text('value')->nullable();
 
             $table->timestamps();
             $table->index('created_at');
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tracker_sql_bindings');
+        Schema::dropIfExists('tracker_sql_bindings_parameters');
     }
 };
