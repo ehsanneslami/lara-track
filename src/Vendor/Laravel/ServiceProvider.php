@@ -210,11 +210,11 @@ class ServiceProvider extends PragmaRXServiceProvider
 
             $geoipModel = $this->instantiateModel('geoip_model');
 
-            $SqlModel = $this->instantiateModel('sql_query_model');
+            $SqlModel = $this->instantiateModel('sql_model');
 
-            $SqlBindingModel = $this->instantiateModel('sql_query_binding_model');
+            $SqlBindingModel = $this->instantiateModel('sql_binding_model');
 
-            $SqlBindingParameterModel = $this->instantiateModel('sql_query_binding_parameter_model');
+            $SqlBindingParameterModel = $this->instantiateModel('sql_binding_parameter_model');
 
             $SqlQueryLogModel = $this->instantiateModel('sql_query_log_model');
 
