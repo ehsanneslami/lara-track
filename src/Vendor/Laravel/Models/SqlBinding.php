@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Tracker\Vendor\Laravel\Models;
 
-class SqlQueryBinding extends Base
+class SqlBinding extends Base
 {
-    protected $table = 'tracker_sql_query_bindings';
+    protected $table = 'tracker_sql_bindings';
 
     protected $fillable = [
         'sha1',
