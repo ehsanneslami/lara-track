@@ -291,11 +291,11 @@ return [
 
     'geoip_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\GeoIp',
 
-    'sql_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\Sql',
+    'sql_query_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQuery',
 
-    'sql_binding_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlBinding',
+    'sql_query_binding_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBinding',
 
-    'sql_binding_parameter_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlBindingParameter',
+    'sql_query_binding_parameter_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryBindingParameter',
 
     'sql_query_log_model' => 'PragmaRX\Tracker\Vendor\Laravel\Models\SqlQueryLog',
 
