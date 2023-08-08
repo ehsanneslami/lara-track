@@ -4,24 +4,24 @@ namespace PragmaRX\Tracker\Data\Repositories;
 
 use PragmaRX\Support\Config;
 
-class SqlQuery extends Repository
+class Sql extends Repository
 {
     private $queries = [];
 
     /**
      * @var SqlQueryLog
      */
-    private $sqlQueryLogRepository;
+    private $SqlQueryLogRepository;
 
     /**
-     * @var SqlQueryBinding
+     * @var SqlBinding
      */
-    private $sqlQueryBindingRepository;
+    private $SqlBindingRepository;
 
     /**
-     * @var SqlQueryBindingParameter
+     * @var SqlBindingParameter
      */
-    private $sqlQueryBindingParameterRepository;
+    private $SqlBindingParameterRepository;
 
     /**
      * @var Connection
@@ -40,20 +40,20 @@ class SqlQuery extends Repository
 
     public function __construct(
         $model,
-        SqlQueryLog $sqlQueryLogRepository,
-        SqlQueryBinding $sqlQueryBindingRepository,
-        SqlQueryBindingParameter $sqlQueryBindingParameterRepository,
+        SqlQueryLog $SqlQueryLogRepository,
+        SqlBinding $SqlBindingRepository,
+        SqlBindingParameter $SqlBindingParameterRepository,
         Connection $connectionRepository,
         Log $logRepository,
         Config $config
     ) {
         parent::__construct($model);
 
-        $this->sqlQueryLogRepository = $sqlQueryLogRepository;
+        $this->SqlQueryLogRepository = $SqlQueryLogRepository;
 
-        $this->sqlQueryBindingRepository = $sqlQueryBindingRepository;
+        $this->SqlBindingRepository = $SqlBindingRepository;
 
-        $this->sqlQueryBindingParameterRepository = $sqlQueryBindingParameterRepository;
+        $this->SqlBindingParameterRepository = $SqlBindingParameterRepository;
 
         $this->connectionRepository = $connectionRepository;
 
@@ -75,9 +75,9 @@ class SqlQuery extends Repository
         $this->clear();
     }
 
-    private function sqlQueryIsLoggable($sqlQuery)
+    private function SqlIsLoggable($Sql)
     {
-        return strpos($sqlQuery, '"tracker_') === false;
+        return strpos($Sql, '"tracker_') === false;
     }
 
     private function serializeBindings($bindings)
@@ -94,7 +94,7 @@ class SqlQuery extends Repository
 
     private function logQuery($query)
     {
-        $sqlQuery = htmlentities($query['query']);
+        $Sql = htmlentities($query['query']);
 
         $bindings = $query['bindings'];
 
@@ -102,7 +102,7 @@ class SqlQuery extends Repository
 
         $name = $query['name'];
 
-        if (!$this->sqlQueryIsLoggable($sqlQuery)) {
+        if (!$this->SqlIsLoggable($Sql)) {
             return;
         }
 
@@ -111,10 +111,10 @@ class SqlQuery extends Repository
             ['name']
         );
 
-        $sqlQueryId = $this->findOrCreate(
+        $SqlId = $this->findOrCreate(
             [
-                'sha1'          => sha1($sqlQuery),
-                'statement'     => $sqlQuery,
+                'sha1'          => sha1($Sql),
+                'statement'     => $Sql,
                 'time'          => $time,
                 'connection_id' => $connectionId,
             ],
@@ -124,7 +124,7 @@ class SqlQuery extends Repository
         if ($bindings && $this->canLogBindings()) {
             $bindingsSerialized = $this->serializeBindings($bindings);
 
-            $sqlQuery_bindings_id = $this->sqlQueryBindingRepository->findOrCreate(
+            $Sql_bindings_id = $this->SqlBindingRepository->findOrCreate(
                 ['sha1' => sha1($bindingsSerialized), 'serialized' => $bindingsSerialized],
                 ['sha1'],
                 $created
@@ -132,9 +132,9 @@ class SqlQuery extends Repository
 
             if ($created) {
                 foreach ($bindings as $parameter => $value) {
-                    $this->sqlQueryBindingParameterRepository->create(
+                    $this->SqlBindingParameterRepository->create(
                         [
-                            'sql_query_bindings_id' => $sqlQuery_bindings_id,
+                            'sql_query_bindings_id' => $Sql_bindings_id,
 
                             // unfortunately laravel uses question marks,
                             // but hopefully someday this will change
@@ -147,10 +147,10 @@ class SqlQuery extends Repository
             }
         }
 
-        $this->sqlQueryLogRepository->create(
+        $this->SqlQueryLogRepository->create(
             [
                 'log_id'       => $this->logRepository->getCurrentLogId(),
-                'sql_query_id' => $sqlQueryId,
+                'sql_query_id' => $SqlId,
             ]
         );
     }
